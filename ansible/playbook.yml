@@ -1,6 +1,6 @@
 ---
 - hosts: aws_ec2
-  gather_facts: true
+  gather_facts: false
   become: true
   roles:
     - website

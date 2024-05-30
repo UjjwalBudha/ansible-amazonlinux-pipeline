@@ -5,13 +5,32 @@
     state: present
     update_cache: true
   loop:
-    - nginx
     - python3-pip
+    - python3-boto3
+    - nginx
 
-- name: Install AWS SDK for Python using yum
-  ansible.builtin.yum:
+- name: Install botocore
+  ansible.builtin.pip: 
     name: "{{ item }}"
     state: present
-    update_cache: yes
   loop:
-    - python3-boto3
+    - botocore
+    - s3transfer
+    - packaging
+
+- name: Remove all files in /usr/share/nginx/html
+  ansible.builtin.file:
+    path: "{{ web_dir }}"
+    state: absent
+  with_fileglob:
+    - '*'
+  notify: Restart nginx
+
+# - name: Download file from s3 to ec2
+#   amazon.aws.s3_object:
+#     bucket: "test-intern-github-action"
+#     dest: "{{ destination }}"
+#     object: "{{ object }}"
+#     mode: get
+#     overwrite: true
+#   notify: Restart nginx
