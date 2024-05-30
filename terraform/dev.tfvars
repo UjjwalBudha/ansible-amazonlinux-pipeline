@@ -26,6 +26,6 @@ name = {
 # ami_id = "ami-04b70fa74e45c3917" # ubuntu
 # ami_id    = "ami-0fe630eb857a6ec83"     # redhat
 #ami_id    = "ami-0f403e3180720dd7e"   # amazon linux 2023
-ami_id    = "ami-033a1ebf088e56e81"   # amazon linux2
+ami_id = "ami-033a1ebf088e56e81" # amazon linux2
 
 

@@ -1,0 +1,17 @@
+---
+- name: Install common packages using yum
+  ansible.builtin.yum:
+    name: "{{ item }}"
+    state: present
+    update_cache: true
+  loop:
+    - nginx
+    - python3-pip
+
+- name: Install AWS SDK for Python using yum
+  ansible.builtin.yum:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  loop:
+    - python3-boto3
