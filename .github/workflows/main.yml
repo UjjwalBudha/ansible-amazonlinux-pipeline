@@ -1,9 +1,5 @@
 name: github_action_to_ec2
 on:
-  push:
-    branches: [ "dev" ]
-  pull_request:
-    branches: [ "main" ]
   workflow_dispatch:
     branches: [ "dev" ]
 
