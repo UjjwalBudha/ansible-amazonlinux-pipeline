@@ -4,7 +4,8 @@ on:
     branches: [ "dev" ]
   pull_request:
     branches: [ "main" ]
-  workflow_dispatch: [ "dev" ]
+  workflow_dispatch:
+    branches: [ "dev" ]
 
 jobs:
   dev:
