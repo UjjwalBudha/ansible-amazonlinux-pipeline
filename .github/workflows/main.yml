@@ -1,13 +1,13 @@
 name: github_action_to_ec2
 on:
+  workflow_dispatch:
+    branches: [ "dev" ]
+
   push:
     branches: [ "dev" ]
 
   pull_request:
     branches: [ "main" ]
-
-  workflow_dispatch:
-    branches: [ "dev" ]
 
 jobs:
   dev:
