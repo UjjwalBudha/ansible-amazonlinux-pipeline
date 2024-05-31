@@ -1,8 +1,8 @@
 ---
 bucket: test-intern-github-action
-website_dir: /var/www/html
-destination: /usr/share/nginx/html/index.html
-object: index.html
+website_dir: /usr/share/nginx/html/*
+destination: /usr/share/nginx/html/
+web_dir_tmp : /tmp/portfolio/
 web_dir: /usr/share/nginx/html/
 common_packages:
   - python3-pip
