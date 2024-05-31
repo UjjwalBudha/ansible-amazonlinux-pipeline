@@ -1,13 +1,10 @@
 ---
-- name: Install common packages using yum
+- name: Install common packages
   yum:
     name: "{{ item }}"
     state: present
     update_cache: true
-  loop:
-    - python3-pip
-    - python3-boto3
-    - nginx
+  loop: "{{ common_packages }}"
 
 
 - name: Remove all files in /usr/share/nginx/html

@@ -1,7 +1,6 @@
 name: github_action_to_ec2
 on:
   workflow_dispatch:
-    branches: [ "main" ]
 
   push:
     branches: [ "dev" ]
