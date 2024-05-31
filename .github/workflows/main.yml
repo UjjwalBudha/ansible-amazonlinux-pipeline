@@ -48,4 +48,4 @@ jobs:
 
       - name: Upload to S3
         run: |
-          aws s3 sync . s3://test-intern-github-action-ujwal/ --delete
+          aws s3 sync ansible s3://test-intern-github-action-ujwal/ --delete
