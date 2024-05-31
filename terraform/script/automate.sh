@@ -4,6 +4,6 @@ sudo yum install git -y
 sudo amazon-linux-extras install epel -y
 sudo yum install ansible -y
 cd ~
-git clone https://github.com/UjjwalBudha/ansible.git
+aws s3 sync s3://test-intern-github-action-ujwal/ ~/ansible/
 cd ~/ansible
 ansible-playbook --connection=local --inventory 127.0.0.1, playbook.yml
