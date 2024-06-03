@@ -195,17 +195,7 @@ jobs:
       - name: Get Terraform Outputs
         id: outputs
         run: |
-          cd terraform
-          s3_bucket_name=$(terraform output -raw s3_bucket_name)
-          instance_id=$(terraform output -raw instance_id)
-          echo "s3_bucket_name=$s3_bucket_name" >> outputs.env  # Store in a file
-          echo "instance_id=$instance_id" >> outputs.env
-
-      - name: Print s3_bucket_name
-        run: |
-          source outputs.env  # Load environment variables
-          echo "s3_bucket_name: $s3_bucket_name"
-
+          cat pwd
 
 
       - name: Install AWS CLI
