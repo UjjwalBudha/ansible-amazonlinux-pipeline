@@ -201,6 +201,11 @@ jobs:
           echo "s3_bucket_name=$s3_bucket_name" >> outputs.env  # Store in a file
           echo "instance_id=$instance_id" >> outputs.env
 
+      - name: Print s3_bucket_name
+        run: |
+          source outputs.env  # Load environment variables
+          echo "s3_bucket_name: $s3_bucket_name"
+
 
 
       - name: Install AWS CLI
