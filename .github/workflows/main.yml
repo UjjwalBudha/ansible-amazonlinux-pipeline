@@ -170,11 +170,10 @@ jobs:
           cd terraform
           terraform apply -var-file=dev.tfvars -auto-approve
 
-      - name: Set INSTANCE_ID environment variable
+      - name: Save instance ID to file
         run: |
           cd terraform
-          instance_id=$(terraform output -raw instance_id)
-          echo "INSTANCE_ID=$instance_id" >> $GITHUB_ENV
+          terraform output -raw instance_id > instance.txt
 
       - name: Install AWS CLI
         run: |
@@ -187,9 +186,10 @@ jobs:
 
       - name: Update EC2 User Data
         run: |
-          INSTANCE_ID=$INSTANCE_ID
+          INSTANCE_ID=$(cat terraform/instance.txt)
           USER_DATA_SCRIPT=$(cat terraform/script/automate.sh)
           aws ec2 modify-instance-attribute --instance-id $INSTANCE_ID --user-data file://<(echo "$USER_DATA_SCRIPT")
+
 
 
 
