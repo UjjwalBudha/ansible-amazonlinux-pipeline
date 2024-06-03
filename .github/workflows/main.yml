@@ -175,6 +175,16 @@ jobs:
           cd terraform
           terraform output -raw instance_id > instance.txt
 
+      - name: Save instance ID to file
+        run: |
+          pwd
+          ls
+          cd terraform
+          ls
+          cd ansible
+          ls
+        
+
       - name: Install AWS CLI
         run: |
           sudo apt-get update

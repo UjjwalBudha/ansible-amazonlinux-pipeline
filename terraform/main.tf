@@ -10,7 +10,7 @@ module "ec2" {
   subnet_id                   = var.subnet_id # public subnet
   iam_instance_profile        = "intern-ujwal"
   key_name                    = try(var.key_name, null)
-  user_data                   = filebase64("script/automate.sh")
+  # user_data                   = filebase64("script/automate.sh")
   tags = {
     Name = each.value
   }
