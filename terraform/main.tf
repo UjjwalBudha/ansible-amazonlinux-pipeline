@@ -15,3 +15,8 @@ module "ec2" {
     Name = each.value
   }
 }
+
+resource "aws_s3_bucket" "ansible_code" {
+  bucket = "amazon-linux-ansible-code-ujwal"
+  acl    = "private"
+}
