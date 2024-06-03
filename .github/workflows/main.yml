@@ -170,8 +170,7 @@ jobs:
           cd terraform
           terraform apply -var-file=dev.tfvars -auto-approve
 
-      - name: Get Terraform Outputs
-        id: terraform_outputs
+      - name: Set INSTANCE_ID environment variable
         run: |
           cd terraform
           instance_id=$(terraform output -raw instance_id)
@@ -191,6 +190,7 @@ jobs:
           INSTANCE_ID=$INSTANCE_ID
           USER_DATA_SCRIPT=$(cat terraform/script/automate.sh)
           aws ec2 modify-instance-attribute --instance-id $INSTANCE_ID --user-data file://<(echo "$USER_DATA_SCRIPT")
+
 
 
 
