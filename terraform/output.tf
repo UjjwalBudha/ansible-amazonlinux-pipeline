@@ -11,5 +11,5 @@ output "s3_bucket_name" {
 }
 
 output "instance_id" {
-  value = module.ec2[0].id
+  value = module.ec2["name1"].id
 }
