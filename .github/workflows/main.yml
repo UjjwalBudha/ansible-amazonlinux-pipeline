@@ -179,10 +179,6 @@ jobs:
         run: |
           pwd
           ls
-          cd terraform
-          ls
-          cd ansible
-          ls
         
 
       - name: Install AWS CLI
@@ -199,7 +195,6 @@ jobs:
           INSTANCE_ID=$(cat terraform/instance.txt)
           USER_DATA_SCRIPT=$(cat terraform/script/automate.sh)
           aws ec2 modify-instance-attribute --instance-id $INSTANCE_ID --user-data file://<(echo "$USER_DATA_SCRIPT")
-
 
 
 
