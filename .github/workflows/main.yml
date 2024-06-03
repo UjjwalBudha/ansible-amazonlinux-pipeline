@@ -196,6 +196,7 @@ jobs:
         id: outputs
         run: |
           pwd
+          ls
 
 
       - name: Install AWS CLI
