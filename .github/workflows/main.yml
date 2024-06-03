@@ -106,7 +106,13 @@ jobs:
           aws s3 sync ansible s3://amazon-linux-ansible-code-ujwal --delete
 
       - name: Update EC2 User Data
-        run: |
-          INSTANCE_ID=$(cat terraform/instance.txt)
-          USER_DATA_SCRIPT=$(cat terraform/script/automate.sh)
-          aws ec2 modify-instance-attribute --instance-id $INSTANCE_ID --user-data file://<(echo "$USER_DATA_SCRIPT")
+        run:
+          - INSTANCE_ID=$(cat terraform/instance.txt)  # Get instance ID
+          - USER_DATA_SCRIPT=$(cat terraform/script/automate.sh)  # Get script content
+
+        # Create a temporary file with the script content
+        run:
+          - echo "$USER_DATA_SCRIPT" > user_data.sh  
+
+        # Update user data using the temporary file
+        aws ec2 modify-instance-attribute --instance-id $INSTANCE_ID --user-data file://user_data.sh
