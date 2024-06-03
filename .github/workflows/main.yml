@@ -52,85 +52,6 @@
 
 
 
-
-
-# name: github_action_to_ec2
-# on:
-#   workflow_dispatch:
-
-#   push:
-#     branches: [ "dev" ]
-
-#   pull_request:
-#     branches: [ "main" ]
-
-# jobs:
-#   dev:
-#     runs-on: ubuntu-latest
-#     env:
-#       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#       AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
-#       AWS_DEFAULT_REGION: us-east-1
-
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v2
-
-#       - name: Setting up terraform
-#         uses: hashicorp/setup-terraform@v2
-#         with:
-#           terraform_version: 1.8
-
-#       - name: Terraform Init
-#         run: |
-#           cd terraform
-#           terraform init 
-
-#       - name: Terraform plan
-#         run: |
-#           cd terraform
-#           terraform plan -var-file=dev.tfvars
-
-#       - name: Terraform apply
-#         run: |
-#           cd terraform
-#           terraform apply -var-file=dev.tfvars -auto-approve
-
-#       - name: Get Terraform Outputs
-#         id: outputs
-#         run: |
-#           cd terraform
-#           echo "s3_bucket_name=$(terraform output -raw s3_bucket_name)" >> $GITHUB_ENV
-#           echo "instance_id=$(terraform output -raw instance_id)" >> $GITHUB_ENV
-
-#       - name: Install AWS CLI
-#         run: |
-#           sudo apt-get update
-#           sudo apt-get install -y awscli
-
-#       - name: Upload to S3
-#         run: |
-#           aws s3 sync ansible s3://$s3_bucket_name/ --delete
-
-#       - name: Update EC2 User Data
-#         run: |
-#           INSTANCE_ID=$instance_id
-#           USER_DATA_SCRIPT=$(cat <<EOF
-#           #!/bin/bash
-#           sudo yum update -y
-#           sudo yum install git -y
-#           sudo amazon-linux-extras install epel -y
-#           sudo yum install ansible -y
-#           cd ~
-#           aws s3 sync s3://$s3_bucket_name/ ~/ansible/
-#           cd ~/ansible
-#           ansible-playbook --connection=local --inventory 127.0.0.1, playbook.yml
-#           EOF
-#           )
-#           aws ec2 modify-instance-attribute --instance-id $INSTANCE_ID --user-data file://<(echo "$USER_DATA_SCRIPT")
-
-
 name: github_action_to_ec2
 on:
   workflow_dispatch:
@@ -175,12 +96,6 @@ jobs:
           cd terraform
           terraform output -raw instance_id > instance.txt
 
-      - name: Save instance ID to file
-        run: |
-          pwd
-          ls
-        
-
       - name: Install AWS CLI
         run: |
           sudo apt-get update
@@ -195,7 +110,3 @@ jobs:
           INSTANCE_ID=$(cat terraform/instance.txt)
           USER_DATA_SCRIPT=$(cat terraform/script/automate.sh)
           aws ec2 modify-instance-attribute --instance-id $INSTANCE_ID --user-data file://<(echo "$USER_DATA_SCRIPT")
-
-
-
-
