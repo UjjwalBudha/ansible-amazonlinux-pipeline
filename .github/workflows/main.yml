@@ -81,7 +81,7 @@ jobs:
       - name: Terraform Init
         run: |
           cd terraform
-          terraform init
+          terraform init --reconfigure
 
       - name: Terraform plan
         run: |
