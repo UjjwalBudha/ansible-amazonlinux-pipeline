@@ -134,18 +134,14 @@
 name: github_action_to_ec2
 on:
   workflow_dispatch:
-
   push:
     branches: [ "dev" ]
-
-  # pull_request:
-  #   branches: [ "main" ]
 
 jobs:
   dev:
     runs-on: ubuntu-latest
     env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}  # Assuming retrieved from AWS Secrets Manager
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}  
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
       AWS_DEFAULT_REGION: us-east-1
@@ -174,30 +170,12 @@ jobs:
           cd terraform
           terraform apply -var-file=dev.tfvars -auto-approve
 
-      # - name: Get Terraform Outputs
-      #   id: outputs
-      #   run: |
-      #     cd terraform
-      #     s3_bucket_name=$(terraform output -raw s3_bucket_name)
-      #     instance_id=$(terraform output -raw instance_id)
-      #     echo "s3_bucket_name=$s3_bucket_name" >> $GITHUB_ENV
-      #     echo "instance_id=$instance_id" >> $GITHUB_ENV
-
-      # - name: Get Terraform Outputs
-      #   id: outputs
-      #   run: |
-      #     cd terraform
-      #     s3_bucket_name=$(terraform output -raw s3_bucket_name)
-      #     instance_id=$(terraform output -raw instance_id)
-      #     echo "::set-output name=s3_bucket_name::$s3_bucket_name"
-      #     echo "::set-output name=instance_id::$instance_id"
-
       - name: Get Terraform Outputs
-        id: outputs
+        id: terraform_outputs
         run: |
-          pwd
-          ls
-
+          cd terraform
+          instance_id=$(terraform output -raw instance_id)
+          echo "INSTANCE_ID=$instance_id" >> $GITHUB_ENV
 
       - name: Install AWS CLI
         run: |
@@ -206,12 +184,13 @@ jobs:
 
       - name: Upload to S3
         run: |
-          aws s3 sync ansible s3://$s3_bucket_name/ --delete
+          aws s3 sync ansible s3://amazon-linux-ansible-code-ujwal --delete
 
       - name: Update EC2 User Data
         run: |
-          INSTANCE_ID=$instance_id
-          # Assuming user-data.sh exists in the repository
-          USER_DATA_SCRIPT=$(cat user-data.sh)
+          INSTANCE_ID=$INSTANCE_ID
+          USER_DATA_SCRIPT=$(cat terraform/script/automate.sh)
           aws ec2 modify-instance-attribute --instance-id $INSTANCE_ID --user-data file://<(echo "$USER_DATA_SCRIPT")
+
+
 
