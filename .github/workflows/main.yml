@@ -174,14 +174,24 @@ jobs:
           cd terraform
           terraform apply -var-file=dev.tfvars -auto-approve
 
+      # - name: Get Terraform Outputs
+      #   id: outputs
+      #   run: |
+      #     cd terraform
+      #     s3_bucket_name=$(terraform output -raw s3_bucket_name)
+      #     instance_id=$(terraform output -raw instance_id)
+      #     echo "s3_bucket_name=$s3_bucket_name" >> $GITHUB_ENV
+      #     echo "instance_id=$instance_id" >> $GITHUB_ENV
+
       - name: Get Terraform Outputs
         id: outputs
         run: |
           cd terraform
           s3_bucket_name=$(terraform output -raw s3_bucket_name)
           instance_id=$(terraform output -raw instance_id)
-          echo "s3_bucket_name=$s3_bucket_name" >> $GITHUB_ENV
-          echo "instance_id=$instance_id" >> $GITHUB_ENV
+          echo "::set-output name=s3_bucket_name::$s3_bucket_name"
+          echo "::set-output name=instance_id::$instance_id"
+
 
       - name: Install AWS CLI
         run: |
