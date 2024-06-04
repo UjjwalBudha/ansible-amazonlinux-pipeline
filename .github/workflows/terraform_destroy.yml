@@ -1,4 +1,4 @@
-name: github_action_to_ec2
+name: github_action_to_terminate_ec2
 on:
   workflow_dispatch:
 
