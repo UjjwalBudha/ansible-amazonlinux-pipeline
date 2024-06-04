@@ -16,7 +16,7 @@
 
 - name: Clone portfolio repository
   ansible.builtin.git:
-    repo: 'https://github.com/UjjwalBudha/portfolio.git'
+    repo: "{{ github_repo }}"
     dest: "{{ web_dir_tmp }}"
     force: yes
 
