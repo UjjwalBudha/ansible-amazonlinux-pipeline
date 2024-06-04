@@ -71,6 +71,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Install AWS CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y awscli
+
+      - name: Create S3 bucket
+        run: |
+          aws s3api create-bucket --bucket amazon-linux-ansible-code-ujwal --region us-east-1 --create-bucket-configuration LocationConstraint=us-east-1
+
+      - name: Upload to S3
+        run: |
+          aws s3 sync ansible s3://amazon-linux-ansible-code-ujwal --delete
+
       - name: Setting up terraform
         uses: hashicorp/setup-terraform@v2
         with:
@@ -90,24 +103,3 @@ jobs:
         run: |
           cd terraform
           terraform apply -var-file=dev.tfvars -auto-approve
-
-      - name: Save instance ID to file
-        run: |
-          cd terraform
-          terraform output -raw instance_id > instance.txt
-
-      - name: Install AWS CLI
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y awscli
-
-      - name: Upload to S3
-        run: |
-          aws s3 sync ansible s3://amazon-linux-ansible-code-ujwal --delete
-
-      - name: Update EC2 User Data
-        run: |
-          INSTANCE_ID=$(cat terraform/instance.txt)  
-          USER_DATA_SCRIPT=$(cat terraform/script/automate.sh)  
-          echo "$USER_DATA_SCRIPT" > user_data.sh  
-          aws ec2 modify-instance-attribute --instance-id $INSTANCE_ID --user-data file://user_data.sh
