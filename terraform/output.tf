@@ -5,11 +5,3 @@ output "instnace_ip" {
 output "id" {
   value = [for instance_id in module.ec2 : instance_id.id]
 }
-
-# output "s3_bucket_name" {
-#   value = aws_s3_bucket.ansible_code.bucket
-# }
-
-# output "instance_id" {
-#   value = module.ec2["name1"].id
-# }
