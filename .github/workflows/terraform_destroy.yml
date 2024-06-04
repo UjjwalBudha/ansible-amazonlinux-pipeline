@@ -1,8 +1,6 @@
-name: github_action_to_ec2
+name: github_action_to_terminate_ec2
 on:
   workflow_dispatch:
-  push:
-    branches: [ "dev" ]
 
 jobs:
   dev:
@@ -22,17 +20,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y awscli
 
-      - name: Create S3 bucket
-        run: |
-          aws s3api create-bucket --bucket ${{ secrets.bucket_name }}
-
-      - name: Delete existing resources in S3 bucket
-        run: |
-          aws s3 rm s3://${{ secrets.bucket_name }} --recursive
-
-      - name: Upload to S3
-        run: |
-          aws s3 sync ansible s3://${{ secrets.bucket_name }} --delete
 
       - name: Setting up terraform
         uses: hashicorp/setup-terraform@v2
@@ -44,12 +31,7 @@ jobs:
           cd terraform
           terraform init
 
-      - name: Terraform plan
+      - name: Terraform destroy
         run: |
           cd terraform
-          terraform plan -var-file=dev.tfvars
-
-      - name: Terraform apply
-        run: |
-          cd terraform
-          terraform apply -var-file=dev.tfvars -auto-approve
+          terraform destroy -var-file=dev.tfvars -auto-approve
