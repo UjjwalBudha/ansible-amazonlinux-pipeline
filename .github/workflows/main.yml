@@ -78,7 +78,7 @@ jobs:
 
       - name: Create S3 bucket
         run: |
-          aws s3api create-bucket --bucket amazon-linux-ansible-code-ujwal --region us-east-1 --create-bucket-configuration LocationConstraint=us-east-1
+          aws s3api create-bucket --bucket amazon-linux-ansible-code-ujwal --region us-east-1
 
       - name: Upload to S3
         run: |
